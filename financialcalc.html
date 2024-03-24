@@ -1,0 +1,69 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Calculator</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+
+</head>
+<body>
+
+    <header>
+        <h1>Financial Calculator</h1>
+    </header>
+
+    <form action="/financialcalc" method="post">
+        {{ form.csrf_token }}
+
+        <p>Welcome to my financial calculator. The purpose of this calculator is to provide a simple tool to estimate the value of your retirement account.</p>
+
+        <label for="investmentTerm">Investment Term (in years): </label>
+        <input type="number" name="investmentTerm" required><br>
+
+        <label for="initialInvestment">Initial Investment: </label>
+        <input type="number" name="initialInvestment" required><br>
+
+        <label for="investmentYearX">Investment in year 1: </label>
+        <input type="number" name="investmentYearX" required><br>
+
+        <label for="increment"> Yearly increment level: </label>
+        <input type="number" name="investmentIncrement" required><br>
+        <p>The stock market typically return 5% while s&p500 typically returns 9% annually</p>
+
+        <label for="rateOfReturn"> Expected rate of return: </label>
+        <input type="number" name="expectedReturn" required><br>
+
+        <input type="hidden" name="submit" value="true">
+        <input type="submit" value="Calculate">
+    </form>
+
+    {% if data %}
+        <table>
+            <tr>
+                <th>Year</th>
+                <th>Account Value</th>
+                <th>Principle Value</th>
+            </tr>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item.year }}</td>
+                    <td>{{ item.account_value | default('') }}</td>
+                    <td>{{ item.principle_value | default('') }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p><strong>Returns Reaped: {{ data[-1].returns_reaped }}</strong></p>
+
+    {% else %}
+        <p>Please enter the forms correctly</p>
+    {% endif %}
+
+    <footer>
+        <p>&copy; 2024 Financial Calculator. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
